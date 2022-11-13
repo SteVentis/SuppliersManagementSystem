@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Core.Repositories
+namespace Infrastructure.Interfaces
 {
-    public interface ISupplierRepository : IGenericRepository<Supplier>
+    public interface ISuppliersNotifier
     {
-        
+        Task NotifySupplierForRegistration(Supplier supplier);
     }
 }

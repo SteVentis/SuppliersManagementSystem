@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Observability", "Observability\Observability.csproj", "{63EAD43A-FDA1-4C87-A39C-6299562C0F76}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "UI", "UI\UI.esproj", "{141D6628-F34A-421C-A3AE-A315EC8E1E70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,12 @@ Global
 		{63EAD43A-FDA1-4C87-A39C-6299562C0F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63EAD43A-FDA1-4C87-A39C-6299562C0F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63EAD43A-FDA1-4C87-A39C-6299562C0F76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141D6628-F34A-421C-A3AE-A315EC8E1E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141D6628-F34A-421C-A3AE-A315EC8E1E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141D6628-F34A-421C-A3AE-A315EC8E1E70}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{141D6628-F34A-421C-A3AE-A315EC8E1E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141D6628-F34A-421C-A3AE-A315EC8E1E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141D6628-F34A-421C-A3AE-A315EC8E1E70}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

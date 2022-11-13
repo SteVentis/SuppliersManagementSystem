@@ -17,19 +17,5 @@ namespace Repository.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
-        {
-            var suppliers = await _model.Include(x => x.Category).Include(x => x.Country).ToListAsync();
-            return suppliers;
-        }
-
-        public async Task<Supplier> GetSupplierByIdAsync(int id)
-        {
-            var existedSupplier = await _model.Include(x => x.Category)
-                                    .Include(x => x.Country)
-                                    .FirstOrDefaultAsync(supplier => supplier.Id == id);
-
-            return existedSupplier;
-        }
     }
 }

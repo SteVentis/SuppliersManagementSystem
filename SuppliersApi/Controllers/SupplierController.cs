@@ -12,6 +12,10 @@ using Models.Entities;
 using DataAccess.Context;
 using Repository.Core;
 using Infrastructure.Interfaces;
+using Models.Email;
+using FluentValidation;
+using Models.Validations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SuppliersApi.Controllers
 {
@@ -23,24 +27,27 @@ namespace SuppliersApi.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IValidator<ValidatorBase> _validator;
 
         public SupplierController(ILoggerManager logger,
-            IMapper mapper,IUnitOfWork unitOfWork, IEmailService emailService)
+            IMapper mapper,IUnitOfWork unitOfWork,
+            IEmailService emailService, IValidator<ValidatorBase> validator)
         {
             _logger = logger;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _emailService = emailService;
+            _validator = validator;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetAllSuppliers()
         {
             try
             {
                 _logger.LogInfo("Fetching all suppliers from the database");
 
-                var suppliers = await _unitOfWork.Suppliers.GetAllSuppliersAsync();
+                var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
                 var mappedSuppliers = _mapper.Map<IEnumerable<SupplierReadDto>>(suppliers);
 
                 _logger.LogInfo($"Returning {mappedSuppliers.Count()}");
@@ -60,7 +67,7 @@ namespace SuppliersApi.Controllers
             try
             {
                 _logger.LogInfo("Bringing details of supplier");
-                var supplier = await _unitOfWork.Suppliers.GetSupplierByIdAsync(id);
+                var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id);
                 if(supplier is null)
                 {
                     return NotFound();
@@ -83,22 +90,31 @@ namespace SuppliersApi.Controllers
         {
             try
             {
-                
+                //var validationResults = _validator.Validate(supplierCreateDto)
                 var supplierTobeInserted =  _mapper.Map<Supplier>(supplierCreateDto);
-                if (ModelState.IsValid)
+
+                supplierTobeInserted.Country = await _unitOfWork.Countries.GetByIdAsync(supplierTobeInserted.CountryId);
+                if (supplierTobeInserted.Country is null)
+                    return ValidationProblem();
+                supplierTobeInserted.Category = await _unitOfWork.Categories.GetByIdAsync(supplierTobeInserted.CategoryId);
+                if (supplierTobeInserted.Category is null)
+                    return ValidationProblem();
+
+                if (!ModelState.IsValid)
                 {
-                    supplierTobeInserted.Country = await _unitOfWork.Countries.GetByIdAsync(supplierTobeInserted.CountryId);
-                    supplierTobeInserted.Category = await _unitOfWork.Categories.GetByIdAsync(supplierTobeInserted.CategoryId);
-                    await _unitOfWork.Suppliers.InsertAsync(supplierTobeInserted);
-                    _emailService.SendEmailForRegistration(supplierTobeInserted);
-
-                    _logger.LogInfo($"Supplier with ID {supplierTobeInserted.Id} inserted succesfully");
+                    return BadRequest("Invalid Data");     
                 }
-               
-                var supplierReadDto =  _mapper.Map<SupplierReadDto>(supplierTobeInserted);
+                _unitOfWork.Suppliers.Insert(supplierTobeInserted);
+                //var message = new Message(new string[] { "steveventis@gmail.com" }, "Test", "Test body");
+                //_emailService.SendEmail(message);
 
-                return CreatedAtAction(nameof(GetDetailsOfSupplier), 
+                _logger.LogInfo($"Supplier with ID {supplierTobeInserted.Id} inserted succesfully");
+
+                var supplierReadDto = _mapper.Map<SupplierReadDto>(supplierTobeInserted);
+
+                return CreatedAtAction(nameof(GetDetailsOfSupplier),
                     new { Id = supplierReadDto.ID }, supplierReadDto);
+
                 
             }
             catch (Exception ex)
@@ -113,13 +129,28 @@ namespace SuppliersApi.Controllers
         {
             try
             {
-                var supplierFromRepo = await _unitOfWork.Suppliers.GetSupplierByIdAsync(id);
+                var supplierFromRepo = await _unitOfWork.Suppliers.GetByIdAsync(id);
                 if (supplierFromRepo is null)
                 {
                     return NotFound();
                 }
-                var mappedSupplier = _mapper.Map(supplierUpdateDto,supplierFromRepo);
-                await _unitOfWork.Suppliers.UpdateAsync(mappedSupplier);
+                
+                var supplierToBeUpdated = _mapper.Map(supplierUpdateDto,supplierFromRepo);
+
+                supplierToBeUpdated.Country = await _unitOfWork.Countries.GetByIdAsync(supplierToBeUpdated.CountryId);
+                if (supplierToBeUpdated.Country is null)
+                    return ValidationProblem();
+
+                supplierToBeUpdated.Category = await _unitOfWork.Categories.GetByIdAsync(supplierToBeUpdated.CategoryId);
+                if (supplierToBeUpdated.Category is null)
+                    return ValidationProblem();
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data");
+                }
+
+                _unitOfWork.Suppliers.Update(supplierToBeUpdated);
                 _logger.LogInfo($"Supplier with ID {supplierFromRepo.Id} updated succesfully");
 
                 return NoContent();
@@ -142,7 +173,7 @@ namespace SuppliersApi.Controllers
                 {
                     return NotFound();
                 }
-                await _unitOfWork.Suppliers.DeleteAsync(id);
+                _unitOfWork.Suppliers.Delete(id);
                 _logger.LogInfo($"Supplier with ID {supplierFromRepo.Id} deleted succesfully");
 
                 return NoContent();

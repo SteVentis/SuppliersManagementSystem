@@ -33,7 +33,7 @@ namespace Infrastructure.Services
             mailMessage.From.Add(new MailboxAddress("email",_emailConfig.From));
             mailMessage.To.AddRange(message.To);
             mailMessage.Subject = message.Subject;
-            mailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text){ Text = message.Body };
+            mailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html){ Text = message.Body };
             
             return mailMessage;
         }

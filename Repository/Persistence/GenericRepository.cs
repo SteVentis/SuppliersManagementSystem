@@ -19,11 +19,11 @@ namespace Repository.Persistence
             _context = context;
             _model = _context.Set<T>();
         }
-        public async Task DeleteAsync(int id)
+        public void Delete(int id)
         {
-            var existingModel = await _model.FindAsync(id);
-            _context.Entry(existingModel).State = EntityState.Deleted; 
-            await SaveAsync();
+            var existingModel = _model.Find(id);
+            _model.Remove(existingModel);
+            Save();
         }
 
         public async Task<T> GetByIdAsync(int id)
@@ -36,22 +36,21 @@ namespace Repository.Persistence
             return await _model.ToListAsync();
         }
 
-        public async Task InsertAsync(T obj)
+        public void Insert(T obj)
         {
-            await _model.AddAsync(obj);
-            await SaveAsync();
+            _model.Add(obj);
+            Save();
         }
 
-        public async Task<bool> SaveAsync()
+        public bool Save()
         {
-            return (await _context.SaveChangesAsync() >= 0);
+            return (_context.SaveChanges() >= 0);
         }
 
-        public async Task UpdateAsync(T obj)
+        public void Update(T obj)
         {
-            _model.Attach(obj);
-            _context.Entry(obj).State = EntityState.Modified;
-            await SaveAsync();
+            _model.Attach(obj);       
+            Save();
 
         }
     }
