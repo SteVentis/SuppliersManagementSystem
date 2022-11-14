@@ -9,6 +9,9 @@ import { LoginComponent } from './components/login/login.component';
 import { SupplierComponent } from './components/supplier/supplier.component';
 import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AppRoutingModule } from './app-routing.module';
+import { RouterModule } from '@angular/router';
+
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -28,10 +31,11 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:5001"],
+        allowedDomains: ["localhost:44309"],
         disallowedRoutes: []
       }
-    })
+    }),
+    AppRoutingModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
