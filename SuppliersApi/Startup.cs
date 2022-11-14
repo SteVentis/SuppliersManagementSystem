@@ -16,13 +16,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Models.Dtos;
 using Models.Email;
-using Models.Validations;
 using NLog;
 using Observability.Contracts;
 using Observability.LoggerService;
 using Repository.Core;
 using Repository.Persistence;
+using SuppliersApi.Validations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,12 +54,23 @@ namespace SuppliersApi
             services.AddSingleton<ILoggerManager, LoggerManager>();           
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IValidator<SupplierCreateOrUpdateDto>, SupplierValidator>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => 
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            services.AddValidatorsFromAssemblyContaining<ValidatorBase>();
+            services.AddValidatorsFromAssemblyContaining<SupplierCreateOrUpdateDto>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("EnableCORS", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
 
             services.AddAuthentication(opt =>
             {
@@ -77,6 +89,8 @@ namespace SuppliersApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sup£rpa55w0rd!"))
                 };
             });
+
+            
             
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
@@ -107,6 +121,8 @@ namespace SuppliersApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SuppliersApi v1"));
             }
+
+            app.UseCors("EnableCORS");
 
             app.UseHttpsRedirection();
 

@@ -14,8 +14,8 @@ using Repository.Core;
 using Infrastructure.Interfaces;
 using Models.Email;
 using FluentValidation;
-using Models.Validations;
 using Microsoft.AspNetCore.Authorization;
+using FluentValidation.AspNetCore;
 
 namespace SuppliersApi.Controllers
 {
@@ -27,11 +27,11 @@ namespace SuppliersApi.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IValidator<ValidatorBase> _validator;
+        private readonly IValidator<SupplierCreateOrUpdateDto> _validator;
 
         public SupplierController(ILoggerManager logger,
             IMapper mapper,IUnitOfWork unitOfWork,
-            IEmailService emailService, IValidator<ValidatorBase> validator)
+            IEmailService emailService, IValidator<SupplierCreateOrUpdateDto> validator)
         {
             _logger = logger;
             _mapper = mapper;
@@ -40,7 +40,7 @@ namespace SuppliersApi.Controllers
             _validator = validator;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetAllSuppliers()
         {
             try
@@ -86,19 +86,27 @@ namespace SuppliersApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSupplier(SupplierCreateDto supplierCreateDto)
+        public async Task<IActionResult> CreateSupplier(SupplierCreateOrUpdateDto supplierDto)
         {
             try
             {
-                //var validationResults = _validator.Validate(supplierCreateDto)
-                var supplierTobeInserted =  _mapper.Map<Supplier>(supplierCreateDto);
+                var validationResults = await _validator.ValidateAsync(supplierDto);
+                if (!validationResults.IsValid)
+                {
+
+                    validationResults.AddToModelState(this.ModelState);
+                    return ValidationProblem();
+                }
+
+                var supplierTobeInserted =  _mapper.Map<Supplier>(supplierDto);
 
                 supplierTobeInserted.Country = await _unitOfWork.Countries.GetByIdAsync(supplierTobeInserted.CountryId);
                 if (supplierTobeInserted.Country is null)
                     return ValidationProblem();
+
                 supplierTobeInserted.Category = await _unitOfWork.Categories.GetByIdAsync(supplierTobeInserted.CategoryId);
                 if (supplierTobeInserted.Category is null)
-                    return ValidationProblem();
+                    return ValidationProblem("Category not found");
 
                 if (!ModelState.IsValid)
                 {
@@ -125,17 +133,25 @@ namespace SuppliersApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSupplier(int id,SupplierUpdateDto supplierUpdateDto)
+        public async Task<IActionResult> UpdateSupplier(int id, SupplierCreateOrUpdateDto supplierDto)
         {
             try
             {
+                var validationResults = await _validator.ValidateAsync(supplierDto);
+                if (!validationResults.IsValid)
+                {
+
+                    validationResults.AddToModelState(this.ModelState);
+                    return ValidationProblem();
+                }
+
                 var supplierFromRepo = await _unitOfWork.Suppliers.GetByIdAsync(id);
                 if (supplierFromRepo is null)
                 {
                     return NotFound();
                 }
                 
-                var supplierToBeUpdated = _mapper.Map(supplierUpdateDto,supplierFromRepo);
+                var supplierToBeUpdated = _mapper.Map(supplierDto, supplierFromRepo);
 
                 supplierToBeUpdated.Country = await _unitOfWork.Countries.GetByIdAsync(supplierToBeUpdated.CountryId);
                 if (supplierToBeUpdated.Country is null)

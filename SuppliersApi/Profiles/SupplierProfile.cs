@@ -9,8 +9,8 @@ namespace SuppliersApi.Profiles
         public SupplierProfile()
         {
             CreateMap<Supplier, SupplierReadDto>();
-            CreateMap<SupplierCreateDto, Supplier>();
-            CreateMap<SupplierUpdateDto, Supplier>();
+            CreateMap<SupplierCreateOrUpdateDto, Supplier>();
+            
         }
     }
 }
