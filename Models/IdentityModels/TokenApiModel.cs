@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Models.IdentityModels
 {
-    public class AuthenticatedResponse
+    public class TokenApiModel
     {
 #nullable enable
-        public string? Token { get; set; }
+        public string? AccessToken { get; set; }
         public string? RefreshToken { get; set; }
     }
 }

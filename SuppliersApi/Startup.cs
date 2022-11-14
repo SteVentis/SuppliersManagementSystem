@@ -55,6 +55,7 @@ namespace SuppliersApi
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IValidator<SupplierCreateOrUpdateDto>, SupplierValidator>();
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => 
@@ -84,8 +85,8 @@ namespace SuppliersApi
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://localhost:5001",
-                    ValidAudience = "https://localhost:5001",
+                    ValidIssuer = "https://localhost:44309",
+                    ValidAudience = "https://localhost:44309",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sup£rpa55w0rd!"))
                 };
             });

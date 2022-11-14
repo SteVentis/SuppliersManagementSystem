@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{6F60A362-72D8-4EB6-B3C9-D3ADBDEE2FFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{6F60A362-72D8-4EB6-B3C9-D3ADBDEE2FFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{973A5098-734F-42B5-9839-9BDF4FDF40D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{973A5098-734F-42B5-9839-9BDF4FDF40D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuppliersApi", "SuppliersApi\SuppliersApi.csproj", "{16643887-42DC-49BF-96D4-57ACD39C013C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuppliersApi", "SuppliersApi\SuppliersApi.csproj", "{16643887-42DC-49BF-96D4-57ACD39C013C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{822575D5-419E-438A-BC91-D34859A4B4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{822575D5-419E-438A-BC91-D34859A4B4A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{12E820A4-03A6-4135-924D-0F5191A335B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{12E820A4-03A6-4135-924D-0F5191A335B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Observability", "Observability\Observability.csproj", "{63EAD43A-FDA1-4C87-A39C-6299562C0F76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Observability", "Observability\Observability.csproj", "{63EAD43A-FDA1-4C87-A39C-6299562C0F76}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "UI", "UI\UI.esproj", "{141D6628-F34A-421C-A3AE-A315EC8E1E70}"
 EndProject

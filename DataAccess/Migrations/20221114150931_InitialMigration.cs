@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
@@ -33,6 +34,22 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LoginModels",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpireTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoginModels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Suppliers",
                 columns: table => new
                 {
@@ -64,6 +81,47 @@ namespace DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Category_Name" },
+                values: new object[,]
+                {
+                    { 1, "Food Supplier" },
+                    { 2, "Drinks Supplier" },
+                    { 3, "Electronic equipment" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Country_Name" },
+                values: new object[,]
+                {
+                    { 1, "Germany" },
+                    { 2, "Greece" },
+                    { 3, "England" },
+                    { 4, "France" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "LoginModels",
+                columns: new[] { "Id", "Password", "RefreshToken", "RefreshTokenExpireTime", "UserName" },
+                values: new object[] { 1L, "def@123", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "johndoe" });
+
+            migrationBuilder.InsertData(
+                table: "Suppliers",
+                columns: new[] { "Id", "Address", "CategoryId", "CountryId", "Email", "IsActive", "Name", "Phone", "TaxIdentNumber" },
+                values: new object[] { 1, "Koln", 3, 1, "elEquip@gmail.com", false, "Electronic Equipments", "275698541256", 123456789 });
+
+            migrationBuilder.InsertData(
+                table: "Suppliers",
+                columns: new[] { "Id", "Address", "CategoryId", "CountryId", "Email", "IsActive", "Name", "Phone", "TaxIdentNumber" },
+                values: new object[] { 3, "Athens", 2, 2, "drinksEquip@gmail.com", false, "Drink Supplies", "6985412566", 123789456 });
+
+            migrationBuilder.InsertData(
+                table: "Suppliers",
+                columns: new[] { "Id", "Address", "CategoryId", "CountryId", "Email", "IsActive", "Name", "Phone", "TaxIdentNumber" },
+                values: new object[] { 2, "Paris", 1, 4, "foodEquip@gmail.com", false, "Food Supplies", "64789526984", 987654321 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Suppliers_CategoryId",
                 table: "Suppliers",
@@ -77,6 +135,9 @@ namespace DataAccess.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "LoginModels");
+
             migrationBuilder.DropTable(
                 name: "Suppliers");
 

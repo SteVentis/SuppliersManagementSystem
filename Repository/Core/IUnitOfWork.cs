@@ -12,5 +12,6 @@ namespace Repository.Core
         ISupplierRepository Suppliers { get; }
         ICountryRepository Countries { get; }
         ICategoryRepository Categories { get; }
+        ILoginModelRepository LoginModels { get; }
     }
 }

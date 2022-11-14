@@ -8,7 +8,7 @@ namespace SuppliersApi.Validations
         public SupplierValidator()
         {
 
-            RuleFor(x => x.Name).Length(3, 20);
+            RuleFor(x => x.Name).Length(3, 40);
             RuleFor(x => x.TaxIdentNumber).NotNull().NotEmpty();
             RuleFor(x => x.CategoryId).NotNull().NotEmpty();
             RuleFor(x => x.Email).NotEmpty().WithMessage("Email Address is Required")

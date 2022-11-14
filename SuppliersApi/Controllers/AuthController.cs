@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataAccess.Context;
+using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Models.IdentityModels;
+using Repository.Core;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -14,37 +18,43 @@ namespace SuppliersApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginModel user)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITokenService _tokenService; 
+        public AuthController(IUnitOfWork unitOfWork, ITokenService tokenService)
         {
-            if(user is null)
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+        }
+        [HttpPost,Route("login")]
+        public IActionResult Login([FromBody] LoginModel userLogin)
+        {
+            if(userLogin is null)
             {
                 return BadRequest("Invalid Request");
             }
-            if(user.UserName == "johnDoe" && user.Password == "def123")
+
+            var user = _unitOfWork.LoginModels.AuthenticateUser(userLogin.UserName, userLogin.Password);
+            if(user == null)
+                return Unauthorized();
+
+            var claims = new List<Claim>()
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sup£rpa55w0rd!"));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                new Claim(ClaimTypes.Name, userLogin.UserName),
+                new Claim(ClaimTypes.Role, "User")
+            };
+            var accessToken = _tokenService.GenerateAccessToken(claims);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpireTime = DateTime.Now.AddDays(7);
 
-                var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, "User")
-                };
+            _unitOfWork.LoginModels.Update(user);
 
-                var tokeOptions = new JwtSecurityToken(
-                    issuer: "https://localhost:5001",
-                    audience: "https://localhost:5001",
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(5),
-                    signingCredentials: signinCredentials
-                    );
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-
-                return Ok(new AuthenticatedResponse { Token = tokenString });
-            }
-            return Unauthorized();
+            return Ok(new AuthenticatedResponse 
+            { 
+                Token = accessToken,
+                RefreshToken = refreshToken
+            });
+            
         }
     }
 }

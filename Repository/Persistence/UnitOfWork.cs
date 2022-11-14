@@ -20,12 +20,15 @@ namespace Repository.Persistence
 
         public ICategoryRepository Categories { get; private set; }
 
+        public ILoginModelRepository LoginModels { get; private set; }
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
             Suppliers = new SupplierRepository(context);
             Countries = new CountryRepository(context);
             Categories = new CategoryRepository(context);
+            LoginModels = new LoginModelRepository(context);
         }
 
         public void Dispose()
