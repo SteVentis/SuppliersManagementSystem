@@ -7,8 +7,10 @@ import { SupplierComponent } from './components/supplier/supplier.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'supplier', component: SupplierComponent, canActivate: [AuthGuard] }
+  { path: 'supplier', component: SupplierComponent , canActivate: [AuthGuard] }
+  
 ]
 
 @NgModule({

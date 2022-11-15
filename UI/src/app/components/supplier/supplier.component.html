@@ -1,12 +1,51 @@
-<p>supplier works!</p>
-<br>
-<div *ngIf="isUserAuthenticated()" style="color:blue;">
-  <h2>
-    YOU ARE LOGGED IN
-  </h2>
+<br/>
+<br/>
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr style="text-align: center">
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category Code</th>
+            <th scope="col">Address</th>
+            <th scope="col">Country Code</th>
+            <th scope="col">Tax. Ident. Number</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Activation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let supplier of suppliers" style="text-align: center">
+            <td>{{supplier.Id}}</td>
+            <td>{{supplier.Name}}</td>
+            <td>{{supplier.CategoryId}}</td>
+            <td>{{supplier.Address}}</td>
+            <td>{{supplier.CountryId}}</td>
+            <td>{{supplier.TaxIdentNumber}}</td>
+            <td>{{supplier.Email}}</td>
+            <td>{{supplier.Phone}}</td>
+            <td><button type="button" id="isActive" class="btn btn-primary">{{supplier.IsActive}}</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 <br>
+<div class="row">
+  <div class="offset-10 col-md-2 mt-2"> <a href="#">Add Supplier</a> </div>
+</div>
+
+
+<!--<div *ngIf="isUserAuthenticated()" style="color:blue;">
+
+</div>
+<br>
+
 <ul>
   <li *ngIf="!isUserAuthenticated()"><a routerLink="/login">Login</a></li>
   <li *ngIf="isUserAuthenticated()"><a class="logout" (click)="logOut()">Log out</a></li>
-</ul>
+</ul>-->

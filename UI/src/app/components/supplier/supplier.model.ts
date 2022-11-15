@@ -1,11 +1,11 @@
 export interface Supplier {
   Id: number,
   Name: string,
-  Category: number,
+  CategoryId: number,
   TaxIdentNumber: number,
   Address: string,
   CountryId: number,
   Phone: string,
   Email: string,
-
+  IsActive: boolean
 }

@@ -26,6 +26,7 @@ export function tokenGetter() {
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     JwtModule.forRoot({
@@ -35,9 +36,9 @@ export function tokenGetter() {
         disallowedRoutes: []
       }
     }),
-    AppRoutingModule
+
   ],
-  providers: [AuthGuard],
+  providers: [],//AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
