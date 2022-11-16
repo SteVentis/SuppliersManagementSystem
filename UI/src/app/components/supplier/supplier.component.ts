@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Category } from './models/category.model';
 import { Country } from './models/country.model';
+import { SupplierReadDto } from './models/dtos/supplierReadDto';
 import { Supplier } from './models/supplier.model';
 import { SupplierService } from './supplier.service';
 
@@ -19,6 +20,16 @@ export class SupplierComponent implements OnInit {
   createHidden: boolean = false;
   buttonDetailsHidden: boolean = false;
   tableDetailsHidden: boolean = false;
+
+  detailsOfSupplier: SupplierReadDto = {
+      name: '',
+      categoryName: '',
+      taxIdentNumber: 0,
+      address: '',
+      countryName: '',
+      phone: '',
+      email: ''
+  }
 
   toggleCreate() {
     this.createHidden = !this.createHidden;
@@ -55,12 +66,6 @@ export class SupplierComponent implements OnInit {
     localStorage.removeItem("jwt");
     this.router.navigate(["/login"]);
   }
-
-  //enableOrDisableSupplier(): void {
-  //  this.detailsButtonHidden()
-  //}
-  
-  
 
   
 }

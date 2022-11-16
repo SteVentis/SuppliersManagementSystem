@@ -81,8 +81,12 @@ namespace SuppliersApi.Controllers
                     return NotFound();
                 }
                 var mappedSupplier = _mapper.Map<SupplierReadDto>(supplier);
-                return Ok(mappedSupplier);
-                
+                var country = await _unitOfWork.Countries.GetByIdAsync(mappedSupplier.CountryId);
+                var category = await _unitOfWork.Categories.GetByIdAsync(mappedSupplier.CategoryId);
+                mappedSupplier.CountryName = country.Country_Name;
+                mappedSupplier.CategoryName = category.Category_Name;
+
+                return Ok(mappedSupplier);  
 
             }
             catch (Exception ex)
@@ -121,8 +125,7 @@ namespace SuppliersApi.Controllers
                     return BadRequest("Invalid Data");     
                 }
                 _unitOfWork.Suppliers.Insert(supplierTobeInserted);
-                //var message = new Message(new string[] { "steveventis@gmail.com" }, "Test", "Test body");
-                //_emailService.SendEmail(message);
+                _emailService.SendEmailToNewSupplier(supplierTobeInserted);
 
                 _logger.LogInfo($"Supplier with ID {supplierTobeInserted.Id} inserted succesfully");
 

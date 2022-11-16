@@ -1,0 +1,32 @@
+<br />
+<br />
+<br />
+<div class="card border-dark mb-3">
+  <form #supplierForm="ngForm" class="form-control" (ngSubmit)="enableOrDisableSupplier(supplierForm)">
+    <div class="card-header bg-transparent border-dark card-title">
+      <h4 class="card-text text-dark">Details of {{supplier.name}}</h4>
+    </div>
+    <div class="card-body">
+      <h6 class="card-title">Id : {{supplier.id}}</h6>
+      <h6 class="card-title">Name : {{supplier.name}}</h6>
+      <h6 class="card-title">Category Code : {{supplier.categoryId}}</h6>
+      <h6 class="card-title">Category : {{supplier.categoryName}}</h6>
+      <h6 class="card-title">Tax Identity Number : {{supplier.taxIdentNumber}}</h6>
+      <h6 class="card-title">Address : {{supplier.address}}</h6>
+      <h6 class="card-title">Country Code : {{supplier.countryId}}</h6>
+      <h6 class="card-title">Country : {{supplier.countryName}}</h6>
+      <h6 class="card-title">Phone : {{supplier.phone}}</h6>
+      <h6 class="card-title">Email : {{supplier.email}}</h6>
+    </div>
+    <div class="card-footer bg-transparent border-dark">
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary" [routerLink]="['/update',supplier.id]">Update</button>
+        <button type="submit" class="btn btn-warning" >{{supplier.isActive ? 'Disable' : 'Enable'}}</button>
+        <button type="button" class="btn btn-danger" (click)="DeleteSupplier()">Delete</button>
+      </div>
+    </div>
+  </form>
+</div>
+<button class="btn btn-primary" [routerLink]="['/supplier']"> Back </button>
+
+

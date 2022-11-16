@@ -8,6 +8,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\components\login\_interfaces\" />
-    <Folder Include="src\app\components\supplier\models\dtos\" />
   </ItemGroup>
 </Project>

@@ -12,6 +12,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { SupplierCreateComponent } from './components/supplier/supplier-create/supplier-create.component';
+import { SupplierDetailsComponent } from './components/supplier/supplier-details/supplier-details.component';
+import { SupplierUpdateComponent } from './components/supplier/supplier-update/supplier-update.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -23,7 +25,9 @@ export function tokenGetter() {
     LoginComponent,
     SupplierComponent,
     HomeComponent,
-    SupplierCreateComponent
+    SupplierCreateComponent,
+    SupplierDetailsComponent,
+    SupplierUpdateComponent
     
   ],
   imports: [

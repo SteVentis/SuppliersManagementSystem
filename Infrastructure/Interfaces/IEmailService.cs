@@ -11,6 +11,6 @@ namespace Infrastructure.Interfaces
 {
     public interface IEmailService
     {
-        void SendEmail(Message message);
+        void SendEmailToNewSupplier(Supplier supplier);
     }
 }

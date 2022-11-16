@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Category } from './models/category.model';
 import { Country } from './models/country.model';
 import { SupplierCreateDto } from './models/dtos/supplierCreateDto';
+import { SupplierDetailsReadDto } from './models/dtos/supplierDetailsReadDto';
 import { Supplier } from './models/supplier.model';
 
 @Injectable({
@@ -28,24 +29,24 @@ export class SupplierService {
     return this.httpService.get<Supplier[]>(this.url);
   }
 
-  getDetailsOfSupplier(id: number): Observable<Supplier> {
-    return this.httpService.get<Supplier>(this.url + id)
+  getDetailsOfSupplier(id: number): Observable<SupplierDetailsReadDto> {
+    return this.httpService.get<SupplierDetailsReadDto>(this.url + id)
   }
 
   insertSupplier(supplier: SupplierCreateDto): Observable<SupplierCreateDto> {
     return this.httpService.post<Supplier>(this.url, supplier, this.httpOptions);
   }
 
-  updateSupplier(id: number, supplier: Supplier): Observable<Supplier> {
-    return this.httpService.put<Supplier>(this.url + id, supplier, this.httpOptions);
+  updateSupplier(id: number, supplier: SupplierDetailsReadDto): Observable<SupplierDetailsReadDto> {
+    return this.httpService.put<SupplierDetailsReadDto>(this.url + id, supplier, this.httpOptions);
   }
 
-  deleteSupplier(id: number): Observable<Supplier> {
+  deleteSupplier(id: number) {
     return this.httpService.delete<Supplier>(this.url + id, this.httpOptions);
   }
 
-  patchSupplier(id: number, supplier: Supplier): Observable<Supplier> {
-    return this.httpService.patch<Supplier>(this.url + id, supplier, this.httpOptions);
+  patchSupplier(id: number, supplier: SupplierDetailsReadDto): Observable<SupplierDetailsReadDto> {
+    return this.httpService.patch<SupplierDetailsReadDto>(this.url + id, supplier, this.httpOptions);
   }
 
   getAllCountries(): Observable<Country[]> {

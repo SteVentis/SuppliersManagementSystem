@@ -49,11 +49,13 @@ export class SupplierCreateComponent implements OnInit {
     if (form.valid) {
       this.supplierService.insertSupplier(this.supplierToBeInserted).subscribe({
         next: response => console.log(response),
-        error: err => console.log(err)
+        error: err => console.log(err),
+        complete: () => {
+          window.alert("Supplier inserted Successfully"),
+            window.location.reload()
+        }
       });
     }
   }
-  selected() {
-    console.log(this.selectedValue);
-  }
+  
 }

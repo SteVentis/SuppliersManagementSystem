@@ -1,0 +1,56 @@
+<br />
+<br />
+<br />
+<div>
+  <div style="padding-bottom: 50px">
+    <form #supplierForm="ngForm" class="form-control" (ngSubmit)="UpdateSupplier(supplierForm)">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input [(ngModel)]="supplier.name" type="text" class="form-control" id="name" value="supplier.name" name="name">
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select [(ngModel)]="supplier.categoryId" [ngModelOptions]="{standalone: true}" class="form-control" id="category">
+          <option name="category" *ngFor="let category of categories" [ngValue]="category.id" value="supplier.categoryName">{{category.category_Name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input [(ngModel)]="supplier.address" name="address" type="text" class="form-control" id="address" value="supplier.address">
+      </div>
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select [(ngModel)]="supplier.countryId" [ngModelOptions]="{standalone: true}" class="form-control" id="country">
+          <option name="country" *ngFor="let country of countries" [ngValue]="country.id" value="supplier.countryName">{{country.country_Name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="taxIdentNumber">Tax Identity Number</label>
+        <input [(ngModel)]="supplier.taxIdentNumber" name="taxIdentNumber" type="number" class="form-control" id="taxIdentNumber">
+      </div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input [(ngModel)]="supplier.email" name="email" type="email" class="form-control" id="email" value="supplier.email">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input [(ngModel)]="supplier.phone" name="phone" type="number" class="form-control" id="phone" value="supplier.phone">
+      </div>
+      <div class="form-group">
+        <div class="btn-group">
+          <button class="btn btn-primary" type="submit">Update</button>
+          <button type="reset" class="btn btn-warning" >Reset</button>
+        </div>
+      </div>
+
+    </form>
+    <br />
+    <button class="btn btn-primary" [routerLink]="['/supplier']"> Back </button>
+  </div>
+
+
+
+
+
+
+</div>

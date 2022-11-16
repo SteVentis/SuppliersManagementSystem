@@ -21,6 +21,12 @@ namespace Infrastructure.Services
             _emailConfig = emailConfig;
             _logger = logger;  
         }
+        public void SendEmailToNewSupplier(Supplier supplier)
+        {
+            string subject = "Welcome to the Suppliers Management System";
+            var message = new Message(new string[] { supplier.Email }, subject, EmailBody(supplier));
+            SendEmail(message);
+        }
         public void SendEmail(Message message)
         {
             MimeMessage mailMessage = this.CreateEmailMessage(message);
@@ -59,6 +65,20 @@ namespace Infrastructure.Services
                     client.Dispose();
                 }
             }
+        }
+        public string EmailBody(Supplier supplier)
+        {
+            string body = $@"<html>
+                                <head>    
+                                    <title></title>
+                                </head>
+                                <body>
+                                    <h3>Dear {supplier.Name} </h3>
+                                    <p>You have been succcessfully registered to our system.<p/>
+                                   
+                                </body>
+                            </html>";
+            return body;
         }
     }
 }
