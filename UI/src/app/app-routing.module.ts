@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
@@ -6,11 +6,11 @@ import { HomeComponent } from './components/home/home.component';
 import { SupplierComponent } from './components/supplier/supplier.component';
 import { AuthGuard } from './guards/auth.guard';
 
+
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'supplier', component: SupplierComponent , canActivate: [AuthGuard] }
-  
+  { path: 'supplier', component: SupplierComponent, canActivate: [AuthGuard] }
 ]
 
 @NgModule({

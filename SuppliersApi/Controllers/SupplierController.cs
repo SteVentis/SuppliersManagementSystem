@@ -16,6 +16,7 @@ using Models.Email;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace SuppliersApi.Controllers
 {
@@ -47,9 +48,16 @@ namespace SuppliersApi.Controllers
             {
                 _logger.LogInfo("Fetching all suppliers from the database");
 
-                var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
-                var mappedSuppliers = _mapper.Map<IEnumerable<SupplierReadDto>>(suppliers);
+                var suppliers = await _unitOfWork.Suppliers.GetAllSuppliersAsync();
 
+                var mappedSuppliers = _mapper.Map<IEnumerable<SupplierReadDto>>(suppliers);
+                foreach (var item in mappedSuppliers)
+                {
+                    var country = await _unitOfWork.Countries.GetByIdAsync(item.CountryId);
+                    var category = await _unitOfWork.Categories.GetByIdAsync(item.CategoryId);
+                    item.CountryName = country.Country_Name;
+                    item.CategoryName = category.Category_Name;
+                }
                 _logger.LogInfo($"Returning {mappedSuppliers.Count()}");
 
                 return Ok(mappedSuppliers);
@@ -74,7 +82,7 @@ namespace SuppliersApi.Controllers
                 }
                 var mappedSupplier = _mapper.Map<SupplierReadDto>(supplier);
                 return Ok(mappedSupplier);
-
+                
 
             }
             catch (Exception ex)
@@ -177,6 +185,34 @@ namespace SuppliersApi.Controllers
                 return BadRequest();
             }
 
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> EnableOrDisableSupplier(int id, JsonPatchDocument<SupplierCreateOrUpdateDto> patchDoc)
+        {
+            try
+            {
+                var existedSupplier = await _unitOfWork.Suppliers.GetByIdAsync(id);
+                if(existedSupplier is null)
+                    return NotFound();
+
+                var enabledOrDisabledSupplier = _mapper.Map<SupplierCreateOrUpdateDto>(existedSupplier);
+                patchDoc.ApplyTo(enabledOrDisabledSupplier, ModelState);
+                if (!TryValidateModel(enabledOrDisabledSupplier))
+                    return ValidationProblem();
+
+                _mapper.Map(enabledOrDisabledSupplier, existedSupplier);
+
+                _unitOfWork.Suppliers.Update(existedSupplier);
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in EnableOrDisableSupplier method: {ex}");
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]

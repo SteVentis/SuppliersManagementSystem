@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
 
@@ -11,7 +11,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
-
+import { SupplierCreateComponent } from './components/supplier/supplier-create/supplier-create.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -22,9 +22,12 @@ export function tokenGetter() {
     AppComponent,
     LoginComponent,
     SupplierComponent,
-    HomeComponent
+    HomeComponent,
+    SupplierCreateComponent
+    
   ],
   imports: [
+    RouterModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -38,7 +41,7 @@ export function tokenGetter() {
     }),
 
   ],
-  providers: [],//AuthGuard],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

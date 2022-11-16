@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Supplier } from './supplier.model';
+import { Category } from './models/category.model';
+import { Country } from './models/country.model';
+import { Supplier } from './models/supplier.model';
 import { SupplierService } from './supplier.service';
 
 @Component({
@@ -9,32 +12,55 @@ import { SupplierService } from './supplier.service';
   styleUrls: ['./supplier.component.css']
 })
 export class SupplierComponent implements OnInit {
-  dt: any;
-  dataDisplay: any;
-  suppliers!: Array<Supplier>;
+  
+  suppliers!: Supplier[];
+  countries!: Country[];
+  categories!: Category[];
+  createHidden: boolean = false;
+  buttonDetailsHidden: boolean = false;
+  tableDetailsHidden: boolean = false;
 
-  constructor(private supplierService: SupplierService) { }
+  toggleCreate() {
+    this.createHidden = !this.createHidden;
+  }
+  detailsButtonHidden() {
+    this.buttonDetailsHidden = !this.createHidden;
+  }
+
+  tableDetailsOfSupplier() {
+    this.tableDetailsHidden = !this.tableDetailsHidden;
+  }
+
+  constructor(private supplierService: SupplierService, private jwtHelper: JwtHelperService, private router: Router) { }
 
   ngOnInit(): void {
     this.supplierService.getSuppliers().subscribe({
       next: response => {
         this.suppliers = response;
-        this.dt = response;
-        this.dataDisplay = this.dt.data;
       },
       error: e => console.log(e),
-      complete: () => console.log(this.suppliers)
+      complete: () => console.table(this.suppliers)
     });
-
+    
   }
-  //isUserAuthenticated = (): boolean => {
-  //  const token = localStorage.getItem("jwt");
-  //  if (token && !this.jwtHelper.isTokenExpired(token)) {
-  //    return true;
-  //  }
-  //  return false;
+  isUserAuthenticated = (): boolean => {
+    const token = localStorage.getItem("jwt");
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
+      return true;
+    }
+    return false
+  }
+
+  logOut = () => {
+    localStorage.removeItem("jwt");
+    this.router.navigate(["/login"]);
+  }
+
+  //enableOrDisableSupplier(): void {
+  //  this.detailsButtonHidden()
   //}
-  //logOut = () => {
-  //  localStorage.removeItem("jwt");
-  //}
+  
+  
+
+  
 }

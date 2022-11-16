@@ -14,6 +14,8 @@ namespace Models.Dtos
         public string Name { get; set; }
 
         public int CategoryId { get; set; }
+        
+        public string CategoryName { get; set; }
 
         public int TaxIdentNumber { get; set; }
 
@@ -24,6 +26,8 @@ namespace Models.Dtos
         public string Email { get; set; }
 
         public int CountryId { get; set; }
+
+        public string CountryName { get; set; }
 
         public bool IsActive { get; set; }
 

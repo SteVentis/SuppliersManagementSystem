@@ -16,6 +16,9 @@ namespace Repository.Persistence.Repositories
         {
 
         }
-
+        public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
+        {
+            return await _model.ToListAsync();
+        }
     }
 }

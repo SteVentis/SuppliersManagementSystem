@@ -9,6 +9,6 @@ namespace Repository.Core.Repositories
 {
     public interface ISupplierRepository : IGenericRepository<Supplier>
     {
-        
+        Task<IEnumerable<Supplier>> GetAllSuppliersAsync();
     }
 }

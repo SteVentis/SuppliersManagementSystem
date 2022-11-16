@@ -23,5 +23,7 @@ namespace Models.Dtos
         public string Email { get; set; }
 
         public int CountryId { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

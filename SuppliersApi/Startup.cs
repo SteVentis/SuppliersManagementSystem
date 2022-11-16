@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models.Dtos;
 using Models.Email;
+using Newtonsoft.Json.Serialization;
 using NLog;
 using Observability.Contracts;
 using Observability.LoggerService;
@@ -58,8 +59,11 @@ namespace SuppliersApi
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddControllers()
-                .AddNewtonsoftJson(options => 
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
 
             services.AddValidatorsFromAssemblyContaining<SupplierCreateOrUpdateDto>();
 

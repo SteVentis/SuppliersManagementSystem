@@ -1,51 +1,65 @@
-<br/>
-<br/>
-<div class="row">
+<br />
+<br />
+<div class="offset-11 col-md-1 mt-2">
+  <button class="btn btn-danger" *ngIf="isUserAuthenticated()" (click)="logOut()">Log Out</button>
+</div>
+<br />
+<div class="row" *ngIf="isUserAuthenticated()" style="color:blue;">
   <div class="col-md-12">
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr style="text-align: center">
-            <th scope="col">Id</th>
+            <th scope="col">ID</th>
             <th scope="col">Name</th>
-            <th scope="col">Category Code</th>
+            <th scope="col">Category</th>
             <th scope="col">Address</th>
-            <th scope="col">Country Code</th>
+            <th scope="col">Country</th>
             <th scope="col">Tax. Ident. Number</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
+            <th scope="col">Details Of Supplier</th>
             <th scope="col">Activation</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let supplier of suppliers" style="text-align: center">
-            <td>{{supplier.Id}}</td>
-            <td>{{supplier.Name}}</td>
-            <td>{{supplier.CategoryId}}</td>
-            <td>{{supplier.Address}}</td>
-            <td>{{supplier.CountryId}}</td>
-            <td>{{supplier.TaxIdentNumber}}</td>
-            <td>{{supplier.Email}}</td>
-            <td>{{supplier.Phone}}</td>
-            <td><button type="button" id="isActive" class="btn btn-primary">{{supplier.IsActive}}</button></td>
+            <td>{{supplier.id}}</td>
+            <td>{{supplier.name}}</td>
+            <td hidden>{{supplier.categoryId}}</td>
+            <td>{{supplier.categoryName}}</td>
+            <td>{{supplier.address}}</td>
+            <td hidden>{{supplier.countryId}}</td>
+            <td>{{supplier.countryName}}</td>
+            <td>{{supplier.taxIdentNumber}}</td>
+            <td>{{supplier.email}}</td>
+            <td>{{supplier.phone}}</td>
+            <td ><button *ngIf="buttonDetailsHidden" (click)="tableDetailsOfSupplier()" class="btn btn-info">Details</button></td>
+            <td><button class="btn btn-primary" (click)="detailsButtonHidden()">{{supplier.isActive ? 'Disable' : 'Enable'}}</button></td>
           </tr>
         </tbody>
       </table>
     </div>
+    <br/>
+    <div class="row">
+      <div class="offset-1">
+        <button class="btn btn-primary" (click)="toggleCreate()">Insert Supplier</button>
+      </div>
+    </div>
+    <br />
+  </div>
+  
+
+
+</div>
+<br />
+<div *ngIf="createHidden">
+  <div>
+    <app-supplier-create></app-supplier-create>
   </div>
 </div>
-<br>
-<div class="row">
-  <div class="offset-10 col-md-2 mt-2"> <a href="#">Add Supplier</a> </div>
+<div *ngIf="tableDetailsHidden">
+  <div>
+    <p>Button Works</p>
+  </div>
 </div>
-
-
-<!--<div *ngIf="isUserAuthenticated()" style="color:blue;">
-
-</div>
-<br>
-
-<ul>
-  <li *ngIf="!isUserAuthenticated()"><a routerLink="/login">Login</a></li>
-  <li *ngIf="isUserAuthenticated()"><a class="logout" (click)="logOut()">Log out</a></li>
-</ul>-->
